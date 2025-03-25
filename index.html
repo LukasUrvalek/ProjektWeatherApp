@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Application</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <button><img src="Images/icon_search.png"></button>
+            <input type="text" placeholder="Enter city name" spellcheck="false">
+            <button id="menu_bar"><img src="Images/icon_bar.png"></button>
+        </div>
+
+        <div class="toast" id="infoToast">
+            <p>Projekt TAMZ</p>
+            <p>Weather Application</p>
+            <p>Author: Lukáš Urválek</p>
+            <p>Login: URV0007</p>
+            <p>Released: 2025</p>
+            <p>Version: 1.0</p>
+        </div>
+
+        <div class="weather">
+            <img src="Images/weather_clear_night.png" class="weather-icon">
+            <h1 class="temperature">--˚C</h1>
+            <h2 class="city">---</h2>
+
+            <div id="menuPanel" class="menu-panel">
+                <div class="menu-header">
+                    <input type="text" id="addCityInput" placeholder="Přidat město...">
+                    <button id="addCityBtn">+</button>
+                </div>
+                <div class="menu-content">
+                    <div class="menu-city-panel">
+                        <img src="Images/weather_clear_day.svg" alt="" class="menu-icon">
+                        <div>
+                            <p class="menu-city-name">Ostrava</p>
+                            <p class="menu-city-temp">15°C</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-footer">
+                    <button class="menu-footer-btn">
+                        <img src="Images/icon_settings.png">
+                    </button>
+                    <button class="menu-footer-btn" id="infoBtn">
+                        <img src="Images/icon_info.png">
+                    </button>
+                </div>
+            </div>
+
+            <div class="details">
+                <div class="column">
+                    <img src="Images/detail_humidity.png">
+                    <div>
+                        <p class="humidity">--%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="column">
+                    <img src="Images/detail_wind.png">
+                    <div>
+                        <p class="wind">-- km/h</p>
+                        <p>Wind speed</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="extra-info">
+                <div><strong>Pressure:</strong></div>
+                <div class="pressure">---</div>
+            
+                <div><strong>UV Index:</strong></div>
+                <div class="uv">---</div>
+            
+                <div><strong>Description:</strong></div>
+                <div class="description">---</div>
+            </div>
+
+            <div class="forecast forecast-scrollable"></div>
+
+            <canvas id="forecastChart"></canvas>
+        </div>
+    </div>
+
+    <script src="icons.js"></script>
+    <script src="weatherService.js"></script>
+    <script src="uiUpdater.js"></script>
+    <script src="chartRenderer.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

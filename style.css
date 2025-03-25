@@ -1,0 +1,252 @@
+@font-face {
+    font-family: 'Saira-Light';
+    src: url('Fonts/Saira-Light.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Saira-Light', sans-serif;
+}
+
+body {
+    background: #222;
+    overflow-y: scroll;
+}
+
+.card {
+    width: 100%;
+    max-width: 500px;
+    background: linear-gradient(135deg, #16001f, #5b548a);
+    color: #fff;
+    margin: 0 auto;
+    border-radius: 20px;
+    padding: 30px 25px;
+    text-align: center;
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.search button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: #dedbe0;
+    cursor: pointer;
+}
+
+.search input {
+    flex: 1;
+    height: 50px;
+    padding: 0 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    background: #dedbe0;
+    color: #333;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.weather img.weather-icon {
+    width: 150px;
+    margin-top: 20px;
+}
+
+.weather h1.temperature {
+    font-size: 80px;
+    margin: 10px 0;
+}
+
+.weather h2.city {
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.details {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    margin-top: 30px;
+}
+
+.column {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.column img {
+    width: 32px;
+    margin-right: 10px;
+}
+
+.humidity, .wind {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.extra-info {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 6px 10px;
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    margin-top: 40px;
+}
+
+.forecast-scrollable {
+    display: flex;
+    overflow-x: auto;
+    max-width: 100%;
+    gap: 16px;
+    padding: 10px;
+    scroll-snap-type: x mandatory;
+}
+
+.forecast-scrollable::-webkit-scrollbar {
+    height: 6px;
+}
+
+.forecast-day {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 12px;
+    text-align: center;
+    min-width: 80px;
+}
+
+.forecast-day img {
+    width: 40px;
+    height: 40px;
+}
+
+.forecast-day h4 {
+    font-size: 18px;
+    margin: 8px 0 4px;
+}
+
+#forecastChart {
+    margin-top: 40px;
+    width: 100%;
+    max-height: 300px;
+    background-color: transparent;
+}
+
+.menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 260px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 20px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 998;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.menu-panel.active {
+    transform: translateX(0);
+}
+
+.menu-header {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+#addCityInput {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+}
+
+#addCityBtn {
+    padding: 8px 12px;
+    border: none;
+    background: #fff;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.menu-city-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.menu-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.menu-footer {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: auto;
+    gap: 10px;
+}
+
+.menu-footer-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+}
+
+.card {
+    position: relative;
+}
+
+.toast {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 9999;
+}
+
+.toast.show {
+    opacity: 1;
+    pointer-events: auto;
+}
