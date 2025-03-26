@@ -112,3 +112,14 @@ document.getElementById("infoBtn").addEventListener("click", () => {
         toast.classList.remove("show");
     }, 5000);
 });
+
+if (window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", (event) => {
+        const compass = document.getElementById("compass");
+        if (event.alpha !== null) {
+            // Sever je na 0°
+            const rotation = 360 - event.alpha;
+            compass.style.transform = `rotate(${rotation}deg)`;
+        }
+    }, true);
+}
