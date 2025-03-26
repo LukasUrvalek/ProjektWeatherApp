@@ -25,23 +25,17 @@
         </div>
 
         <div class="weather">
-            <img src="Images/weather_clear_night.png" class="weather-icon">
+            <img src="Images/weather_clear_day.svg" class="weather-icon">
             <h1 class="temperature">--˚C</h1>
             <h2 class="city">---</h2>
 
             <div id="menuPanel" class="menu-panel">
                 <div class="menu-header">
-                    <input type="text" id="addCityInput" placeholder="Přidat město...">
+                    <input type="text" id="addCityInput" placeholder="Search city">
                     <button id="addCityBtn">+</button>
                 </div>
                 <div class="menu-content">
-                    <div class="menu-city-panel">
-                        <img src="Images/weather_clear_day.svg" alt="" class="menu-icon">
-                        <div>
-                            <p class="menu-city-name">Ostrava</p>
-                            <p class="menu-city-temp">15°C</p>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="menu-footer">
                     <button class="menu-footer-btn">
@@ -57,7 +51,7 @@
                 <div class="column">
                     <img src="Images/detail_humidity.png">
                     <div>
-                        <p class="humidity">--%</p>
+                        <p class="humidity">-- %</p>
                         <p>Humidity</p>
                     </div>
                 </div>
@@ -92,5 +86,6 @@
     <script src="uiUpdater.js"></script>
     <script src="chartRenderer.js"></script>
     <script src="main.js"></script>
+    <script src="cityPanelManager.js"></script>
 </body>
 </html>

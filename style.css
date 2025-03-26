@@ -34,25 +34,12 @@ html, body {
 .search {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.search button {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    background: #dedbe0;
-    cursor: pointer;
 }
 
 .search input {
     flex: 1;
     height: 50px;
+    width: 50px;
     padding: 0 20px;
     font-size: 16px;
     border-radius: 25px;
@@ -60,8 +47,25 @@ html, body {
     outline: none;
     background: #dedbe0;
     color: #333;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 0 10px;
+}
+
+.search button {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: #dedbe0;
+    cursor: pointer;
 }
 
 .weather img.weather-icon {
@@ -143,7 +147,7 @@ html, body {
 }
 
 .forecast-day h4 {
-    font-size: 18px;
+    font-size: 16px;
     margin: 8px 0 4px;
 }
 
@@ -177,25 +181,28 @@ html, body {
 
 .menu-header {
     display: flex;
+    align-items: center;
     gap: 8px;
-    margin-bottom: 20px;
+    margin: 10px 5px;
 }
 
 #addCityInput {
     flex: 1;
-    padding: 8px;
-    border-radius: 6px;
+    min-width: 0;
+    padding: 16px;
+    border-radius: 25px;
     border: none;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 #addCityBtn {
-    padding: 8px 12px;
+    padding: 16px 12px;
     border: none;
     background: #fff;
-    border-radius: 6px;
+    border-radius: 25px;
     font-weight: bold;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .menu-city-panel {
@@ -206,6 +213,7 @@ html, body {
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .menu-icon {
@@ -234,14 +242,14 @@ html, body {
 
 .toast {
     position: absolute;
-    bottom: 100px;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.85);
     color: #fff;
     padding: 10px 16px;
     border-radius: 8px;
-    font-size: 20px;
+    font-size: 16px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;

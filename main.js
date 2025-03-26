@@ -1,8 +1,18 @@
 
 // main.js – vstupní bod aplikace
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const searchButton = document.querySelector(".search button");
     const searchInput = document.querySelector(".search input");
+
+    setupCityAddHandler();
+
+    const savedCities = loadSavedCities();
+    for (const city of savedCities) {
+        const weather = await getWeatherByCity(city);
+        if (weather) {
+            addCityPanel(weather);
+        }
+    }
 
     searchButton.addEventListener("click", async () => {
         const city = searchInput.value.trim();
@@ -20,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const weather = await getWeatherByCity(city);
                 const forecast = await getForecastByCity(city);
                 updateUI(weather, forecast);
+                input.blur();
             }
         }
     });
