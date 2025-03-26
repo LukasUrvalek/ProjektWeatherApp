@@ -23,8 +23,11 @@ function removeCityFromStorage(city) {
 function setupCityAddHandler() {
     const addButton = document.getElementById("addCityBtn");
     const input = document.getElementById("addCityInput");
+    const clickSound = new Audio("Sounds/sound_click.mp3");
 
     async function handleAddCity() {
+        clickSound.play();
+
         const city = input.value.trim();
         if (!city) return;
 
@@ -92,12 +95,15 @@ function addCityPanel(weather) {
     panel.addEventListener("touchend", (e) => {
         const touchEndX = e.changedTouches[0].clientX;
         const diffX = touchEndX - touchStartX;
+        const deleteSound = new Audio("Sounds/sound_delete.mp3");
 
         if (Math.abs(diffX) > 50) {
             // Animace před odstraněním
             panel.style.transition = "transform 0.3s ease, opacity 0.3s ease";
             panel.style.transform = `translateX(${diffX > 0 ? "100%" : "-100%"})`;
             panel.style.opacity = "0";
+
+            deleteSound.play();
 
             setTimeout(() => {
                 panel.remove();
@@ -111,34 +117,3 @@ function addCityPanel(weather) {
 document.addEventListener("DOMContentLoaded", () => {
     setupCityAddHandler();
 });
-
-function setupCityAddHandler() {
-    const addButton = document.getElementById("addCityBtn");
-    const input = document.getElementById("addCityInput");
-    const clickSound = new Audio("Sounds/sound_click.mp3");
-
-    async function handleAddCity() {
-        clickSound.play();
-
-        const city = input.value.trim();
-        if (!city) return;
-
-        const weather = await getWeatherByCity(city);
-        if (!weather) {
-            alert("Město nebylo nalezeno.");
-            return;
-        }
-
-        addCityPanel(weather);
-        addCityToStorage(weather.city);
-        input.value = "";
-        input.blur();
-    }
-
-    addButton.addEventListener("click", handleAddCity);
-    input.addEventListener("keypress", (event) => {
-        if (event.key === "Enter") {
-            handleAddCity();
-        }
-    });
-}
