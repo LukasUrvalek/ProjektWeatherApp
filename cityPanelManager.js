@@ -111,3 +111,34 @@ function addCityPanel(weather) {
 document.addEventListener("DOMContentLoaded", () => {
     setupCityAddHandler();
 });
+
+function setupCityAddHandler() {
+    const addButton = document.getElementById("addCityBtn");
+    const input = document.getElementById("addCityInput");
+    const clickSound = new Audio("Sounds/sound_click.mp3");
+
+    async function handleAddCity() {
+        clickSound.play();
+
+        const city = input.value.trim();
+        if (!city) return;
+
+        const weather = await getWeatherByCity(city);
+        if (!weather) {
+            alert("Město nebylo nalezeno.");
+            return;
+        }
+
+        addCityPanel(weather);
+        addCityToStorage(weather.city);
+        input.value = "";
+        input.blur();
+    }
+
+    addButton.addEventListener("click", handleAddCity);
+    input.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            handleAddCity();
+        }
+    });
+}
