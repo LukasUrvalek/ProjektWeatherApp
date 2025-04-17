@@ -111,3 +111,69 @@ document.getElementById("infoBtn").addEventListener("click", () => {
         toast.classList.remove("show");
     }, 5000);
 });
+
+document.getElementById("exportJsonBtn").addEventListener("click", async () => {
+    const city = document.querySelector(".city").innerText;
+    const temperature = document.querySelector(".temperature").innerText;
+    const humidity = document.querySelector(".humidity").innerText;
+    const wind = document.querySelector(".wind").innerText;
+    const pressure = document.querySelector(".pressure").innerText;
+    const uv = document.querySelector(".uv").innerText;
+    const description = document.querySelector(".description").innerText;
+
+    // Pokus o získání souřadnic města
+    const apiUrl = `https://api.weatherbit.io/v2.0/current?city=${encodeURIComponent(city)}&key=${apiKey}`;
+    let latitude = null, longitude = null;
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        if (data.data && data.data[0]) {
+            latitude = data.data[0].lat;
+            longitude = data.data[0].lon;
+        }
+    } catch (err) {
+        console.error("Nepodařilo se získat souřadnice města:", err);
+    }
+
+    // Forecast
+    const forecastElements = document.querySelectorAll(".forecast-day");
+    const forecast = Array.from(forecastElements).map(day => ({
+        icon: day.querySelector("img").src,
+        temperature: day.querySelector("h4").innerText,
+        date: day.querySelector("p").innerText
+    }));
+
+    // Aktuální čas
+    const now = new Date();
+    const timestamp = now.toISOString().replace("T", " ").substring(0, 19);
+
+    const weatherData = {
+        city,
+        coordinates: {
+            latitude,
+            longitude
+        },
+        exportedAt: timestamp,
+        current: {
+            temperature,
+            humidity,
+            wind,
+            pressure,
+            uv,
+            description
+        },
+        forecast
+    };
+
+    const jsonString = JSON.stringify(weatherData, null, 2);
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `weather_${city.replace(/\s+/g, "_").toLowerCase()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});
