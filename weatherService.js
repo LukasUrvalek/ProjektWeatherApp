@@ -17,7 +17,11 @@ async function getWeatherByCity(city) {
                 uv: w.uv,
                 code: w.weather.icon,
                 description: w.weather.description,
-                city: w.city_name
+                city: w.city_name,
+                coordinates: {
+                    latitude: w.lat,
+                    longitude: w.lon
+                }
             };
         }
     } catch (err) {
