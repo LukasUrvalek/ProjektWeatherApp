@@ -1,4 +1,3 @@
-
 // uiUpdater.js – aktualizace obsahu na stránce
 function updateUI(weather, forecast) {
     if (!weather || !forecast) return;
@@ -21,25 +20,38 @@ function updateUI(weather, forecast) {
     forecast.forEach((day, index) => {
         const div = document.createElement("div");
         div.className = "forecast-day";
-    
-        // Získání data z dnešního dne + index
+
         const date = new Date();
         date.setDate(date.getDate() + index);
         const dayLabel = index === 0 ? "Today" : `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.`;
-    
+
         div.innerHTML = `
             <img src="${day.icon}" alt="">
             <h4>${day.high_temperature}/${day.low_temperature}˚C</h4>
             <p>${dayLabel}</p>
         `;
-    
+
         forecastContainer.appendChild(div);
         labels.push(dayLabel);
         highs.push(day.high_temperature);
         lows.push(day.low_temperature);
-    });    
+    });
 
     renderForecastChart(labels, highs, lows);
+
+    // 🌍 Přesun mapy a markeru
+    if (map && weather.coordinates) {
+        const lat = weather.coordinates.latitude;
+        const lon = weather.coordinates.longitude;
+
+        map.setView([lat, lon], 8);
+
+        if (mapMarker) {
+            mapMarker.setLatLng([lat, lon]);
+        } else {
+            mapMarker = L.marker([lat, lon]).addTo(map);
+        }
+    }
 }
 
 function GetUvIndexDescription(uvIndex) {
