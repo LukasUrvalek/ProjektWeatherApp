@@ -208,3 +208,28 @@ document.getElementById("exportJsonBtn").addEventListener("click", async () => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const map = L.map('map').setView([50.0755, 14.4378], 6); // Výchozí – Praha
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let marker;
+
+    map.on('click', async function (e) {
+        const { lat, lng } = e.latlng;
+
+        if (marker) map.removeLayer(marker);
+        marker = L.marker([lat, lng]).addTo(map);
+
+        const weather = await getWeatherByCoords(lat, lng);
+        const forecast = await getForecastByCoords(lat, lng);
+
+        if (weather && forecast) {
+            updateUI(weather, forecast);
+        } else {
+            alert("Nepodařilo se načíst data pro tuto lokalitu.");
+        }
+    });
+});
