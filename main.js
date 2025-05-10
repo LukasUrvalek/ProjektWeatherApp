@@ -113,67 +113,98 @@ document.getElementById("infoBtn").addEventListener("click", () => {
 });
 
 document.getElementById("exportJsonBtn").addEventListener("click", async () => {
-    const city = document.querySelector(".city").innerText;
-    const temperature = document.querySelector(".temperature").innerText;
-    const humidity = document.querySelector(".humidity").innerText;
-    const wind = document.querySelector(".wind").innerText;
-    const pressure = document.querySelector(".pressure").innerText;
-    const uv = document.querySelector(".uv").innerText;
-    const description = document.querySelector(".description").innerText;
+    const userChoice = confirm("Chcete exportovat aktuální data (OK), nebo importovat z JSON (Zrušit)?");
 
-    // Pokus o získání souřadnic města
-    const apiUrl = `https://api.weatherbit.io/v2.0/current?city=${encodeURIComponent(city)}&key=${apiKey}`;
-    let latitude = null, longitude = null;
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        if (data.data && data.data[0]) {
-            latitude = data.data[0].lat;
-            longitude = data.data[0].lon;
+    if (userChoice) {
+        // === EXPORT ===
+        const city = document.querySelector(".city").innerText;
+        const temperature = document.querySelector(".temperature").innerText;
+        const humidity = document.querySelector(".humidity").innerText;
+        const wind = document.querySelector(".wind").innerText;
+        const pressure = document.querySelector(".pressure").innerText;
+        const uv = document.querySelector(".uv").innerText;
+        const description = document.querySelector(".description").innerText;
+
+        const apiUrl = `https://api.weatherbit.io/v2.0/current?city=${encodeURIComponent(city)}&key=${apiKey}`;
+        let latitude = null, longitude = null;
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            if (data.data && data.data[0]) {
+                latitude = data.data[0].lat;
+                longitude = data.data[0].lon;
+            }
+        } catch (err) {
+            console.error("Nepodařilo se získat souřadnice města:", err);
         }
-    } catch (err) {
-        console.error("Nepodařilo se získat souřadnice města:", err);
+
+        const forecastElements = document.querySelectorAll(".forecast-day");
+        const forecast = Array.from(forecastElements).map(day => ({
+            icon: day.querySelector("img").src,
+            temperature: day.querySelector("h4").innerText,
+            date: day.querySelector("p").innerText
+        }));
+
+        const now = new Date();
+        const timestamp = now.toISOString().replace("T", " ").substring(0, 19);
+
+        const weatherData = {
+            city,
+            coordinates: { latitude, longitude },
+            exportedAt: timestamp,
+            current: { temperature, humidity, wind, pressure, uv, description },
+            forecast
+        };
+
+        const jsonString = JSON.stringify(weatherData, null, 2);
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `weather_${city.replace(/\s+/g, "_").toLowerCase()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+    } else {
+        // === IMPORT ===
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".json";
+
+        input.addEventListener("change", async () => {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    const city = data.city;
+
+                    const weather = await getWeatherByCity(city);
+                    const forecast = await getForecastByCity(city);
+
+                    if (weather && forecast) {
+                        addCityPanel(weather);
+                        updateUI(weather, forecast);
+                        alert(`Město "${city}" bylo úspěšně importováno a přidáno do oblíbených.`);
+                    } else {
+                        alert("Nepodařilo se načíst data pro importované město.");
+                    }
+
+                } catch (err) {
+                    alert("Chybný formát souboru nebo poškozený JSON.");
+                    console.error("Chyba při importu:", err);
+                }
+            };
+
+            reader.readAsText(file);
+        });
+
+        input.click(); // spustí dialog pro výběr souboru
     }
-
-    // Forecast
-    const forecastElements = document.querySelectorAll(".forecast-day");
-    const forecast = Array.from(forecastElements).map(day => ({
-        icon: day.querySelector("img").src,
-        temperature: day.querySelector("h4").innerText,
-        date: day.querySelector("p").innerText
-    }));
-
-    // Aktuální čas
-    const now = new Date();
-    const timestamp = now.toISOString().replace("T", " ").substring(0, 19);
-
-    const weatherData = {
-        city,
-        coordinates: {
-            latitude,
-            longitude
-        },
-        exportedAt: timestamp,
-        current: {
-            temperature,
-            humidity,
-            wind,
-            pressure,
-            uv,
-            description
-        },
-        forecast
-    };
-
-    const jsonString = JSON.stringify(weatherData, null, 2);
-    const blob = new Blob([jsonString], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `weather_${city.replace(/\s+/g, "_").toLowerCase()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
 });
+
